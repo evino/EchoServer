@@ -14,13 +14,22 @@ CLIENT_OBJS = client.o
 all: client server
 
 client: $(OBJS)
-	$(CC) $(CFLAGS) -o client $(CLIENT_OBJS)
+	$(CC) $(CFLAGS) -o client client.o
 
 server: $(OBJS)
-	$(CC) $(CFLAGS) -o server $(SERVER_OBJS)
+	$(CC) $(CFLAGS) -o server server.o
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $<
+
+client.o: client.c
+	$(CC) $(CFLAGS) -c 	client.c
+
+
+server.o: server.c
+	$(CC) $(CFLAGS) -c server.c
+	
+
+# %.o: %.c
+# 	$(CC) $(CFLAGS) -c $<
 
 clean:
 	rm -f $(all) $(OBJS) client server
