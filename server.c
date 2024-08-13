@@ -65,7 +65,6 @@ int main() {
 
 
         fwrite(buffer, sizeof(char), strlen(buffer), stdout);
-        printf("%d\n", connfd);
     }
 
 
