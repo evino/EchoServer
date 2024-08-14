@@ -6,9 +6,99 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
+
+#include "server.h"
 
 #define PORT 8080
 #define BUFFER_SIZE 1024
+
+
+struct Listener_Socket {
+    int fd;
+    struct sockaddr_in *address;
+};
+
+listener_socket_t *NewSocket(unsigned int port) {
+    listener_socket_t *sock = malloc(sizeof(listener_socket_t));
+
+    // Server Address
+    struct sockaddr_in address;
+
+    sock->address = &address;
+
+    // Server-socket creation (listening socket)
+    sock->fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock->fd < 0) {
+        // printf("socket() errno is %d\n", errno);
+        perror("socket() Error");
+        // return -1;
+        // exit(-1);
+        exit(1);
+        // return;
+    }
+
+    // Defining server address
+    sock->address->sin_family = AF_INET;
+    sock->address->sin_port = htons(PORT);
+    sock->address->sin_addr.s_addr = INADDR_ANY;
+    // unsigned int serverAddrLen = sizeof(address);
+
+    // Bind socket-fd to socket-address
+    if (bind(sock->fd, (const struct sockaddr *) &address, sizeof(address)) != 0) {
+        perror("bind() Error");
+        // return -1;
+        exit(1);
+    }
+
+    // Put server in listen/passive mode
+    if (listen(sock->fd, 0) != 0) {
+        perror("listen() Error");
+        // printf("listen() errno is %d\n", errno);
+        // return -1;
+        exit(1);
+
+    }
+
+    return sock;
+}
+
+
+
+int listener_init(listener_socket_t *sock, unsigned int port) {
+    // Server Address
+    struct sockaddr_in address;
+
+    // Server-socket creation (listening socket)
+    sock->fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock->fd < 0) {
+        // printf("socket() errno is %d\n", errno);
+        perror("socket() Error");
+        return -1;
+    }
+
+    // Defining server address
+    address.sin_family = AF_INET;
+    address.sin_port = htons(PORT);
+    address.sin_addr.s_addr = INADDR_ANY;
+    // unsigned int serverAddrLen = sizeof(address);
+
+    // Bind socket-fd to socket-address
+    if (bind(sock->fd, (const struct sockaddr *) &address, sizeof(address)) != 0) {
+        perror("bind() Error");
+        return -1;
+    }
+
+    // Put server in listen/passive mode
+    if (listen(sock->fd, 0) != 0) {
+        perror("listen() Error");
+        // printf("listen() errno is %d\n", errno);
+        return -1;
+    }
+
+    return 0;
+}
+
 
 int main() {
     // Server Address
