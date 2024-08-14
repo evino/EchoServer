@@ -47,15 +47,17 @@ int main() {
 
     // Gets connection-fd after accepting connection
     int connfd = 0;
+    connfd = accept(serverfd, (struct sockaddr *) &address, (socklen_t *) &serverAddrLen);
 
-        connfd = accept(serverfd, (struct sockaddr *) &address, (socklen_t *) &serverAddrLen);
-        printf("connfd: %d\n", connfd);
     while (1) {
+        printf("connfd: %d\n", connfd);
         char dummy_buf[1] = {0};
         char buffer[BUFFER_SIZE] = {0};
         // int recv_data = recv(connfd, buffer, BUFFER_SIZE, MSG_PEEK);
         if (recv(connfd, buffer, BUFFER_SIZE, 0) == -1) {
-            perror("recv() Error");
+            // perror("recv() Error");
+            connfd = accept(serverfd, (struct sockaddr *) &address, (socklen_t *) &serverAddrLen);
+            printf("buffer at this point contains: %s\n", buffer);
         }
 
         if (send(connfd, dummy_buf, 1, 0) == -1) {
