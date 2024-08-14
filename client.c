@@ -67,13 +67,6 @@ int main() {
     fgets(serverIPAddr, 16, stdin);
     serverIPAddr[strcspn(serverIPAddr, "\n")] = '\0';
 
-    // printf("\nIP: %s", serverIPAddr);
-
-
-
-    // char *serverIPAddr = "127.0.0.1";
-    // char *serverIPAddr = "10.0.0.50";
-
 
     // Convert IPv4 and IPv6 addresses from text to binary form
     if (inet_pton(AF_INET, serverIPAddr, &serv_addr.sin_addr) != 1) {
