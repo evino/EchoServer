@@ -16,9 +16,6 @@ typedef struct Listener_Socket listener_socket_t;
 int listener_init(listener_socket_t *sock, unsigned int port);
 
 
-listener_socket_t *NewSocket(unsigned int port);
-
-
 /** @brief Accept a new connection
  *
  *  @param sock The Listener_Socket from which to get the new
