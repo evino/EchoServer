@@ -63,11 +63,12 @@ listener_socket_t *NewSocket(unsigned int port) {
     return sock;
 }
 
-
+// GLOBAL Server Address
+struct sockaddr_in address;
+unsigned int serverAddrLen = sizeof(address);
 
 int listener_init(listener_socket_t *sock, unsigned int port) {
-    // Server Address
-    struct sockaddr_in address;
+
 
     // Server-socket creation (listening socket)
     sock->fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -97,6 +98,13 @@ int listener_init(listener_socket_t *sock, unsigned int port) {
     }
 
     return 0;
+}
+
+
+int listener_accept(listener_socket_t *sock) {
+    int connfd = accept(sock->fd, (struct sockaddr *) &address, (socklen_t *) &serverAddrLen);
+
+    return connfd;
 }
 
 
