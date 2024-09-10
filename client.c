@@ -92,45 +92,12 @@ int Client_Connect(int sockfd) {
 
 
 int main() {
-    // Socket used to communicate with server
-    // int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    // GetServerIP();
-
-
     int sockfd = Client_Socket_Init();
     printf("Client socket is %d\n", sockfd);
 
     if (sockfd == -1) {
         printf("sockfd() error: %d\n", errno);
     }
-
-    // // Defining server address
-    // struct sockaddr_in serv_addr;
-    // serv_addr.sin_family = AF_INET;
-    // serv_addr.sin_port = htons(SERVER_PORT);
-    // unsigned int servAddrSize = sizeof(serv_addr);
-
-    // char serverIPAddr[16] = {0};
-
-    // fwrite("Enter server IP: ", sizeof(char), strlen("Enter server IP: "), stdout);
-    // // fread(serverIPAddr, 32, sizeof(char), stdin);
-    // fgets(serverIPAddr, 16, stdin);
-    // serverIPAddr[strcspn(serverIPAddr, "\n")] = '\0';
-
-
-
-    // // Convert IPv4 and IPv6 addresses from text to binary form
-    // if (inet_pton(AF_INET, serverIPAddr, &serv_addr.sin_addr) != 1) {
-    //     printf("inet_pton() returned %d\n", errno);
-    //     return -1;
-    // }
-
-
-    // // Connect to server-fd
-    // if (connect(sockfd, (const struct sockaddr *) &serv_addr, (socklen_t) servAddrSize) != 0) {
-    //     printf("Connection failed with error code %d\n", errno);
-    //     return -1;
-    // }
 
     if (Client_Connect(sockfd) != 0) {
         return -1;
