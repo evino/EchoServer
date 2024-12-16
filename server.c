@@ -55,6 +55,7 @@ int listener_init(listener_socket_t *sock, unsigned int port) {
 
 
 int listener_accept(listener_socket_t *sock) {
+    printf("listener_accept() called\n");
     int connfd = accept(sock->fd, (struct sockaddr *) &address, (socklen_t *) &serverAddrLen);
     return connfd;
 }
@@ -75,7 +76,9 @@ int main() {
         printf("connfd: %d\n", connfd);
         char dummy_buf[1] = {0};
         char buffer[BUFFER_SIZE] = {0};
-        if (recv(connfd, buffer, BUFFER_SIZE, 0) == -1) {
+
+        size_t recv_val = recv(connfd, buffer, BUFFER_SIZE, 0);
+        if (recv_val == -1) {
             connfd = listener_accept(sock);
             printf("buffer at this point contains: %s\n", buffer);
         }
@@ -88,5 +91,7 @@ int main() {
 
         fwrite(buffer, sizeof(char), strlen(buffer), stdout);
     }
+
+    printf("Exited while()\n");
 
 }

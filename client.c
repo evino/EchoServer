@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "client.h"
 
@@ -14,6 +15,8 @@
 #define BUFFER_SIZE 1024
 char serverIPAddr[16] = {0};
 
+
+bool socket_open = false;
 
 void ClientWriter(int sockfd) {
     char buffer[BUFFER_SIZE] = {0};
@@ -29,7 +32,9 @@ void ClientWriter(int sockfd) {
 
     if (strcmp(buffer, "KILL\n") == 0) {
         printf("should die\n");
-        close(sockfd);
+        // close(sockfd);
+
+        socket_open = false;
     }
 
     // if (send(sockfd, buffer, strlen(buffer)) != strlen(buffer) + 1) {
@@ -103,7 +108,12 @@ int main() {
         return -1;
     }
 
+    socket_open = true;
+
     while (1) {
+        if (socket_open == false) {
+            return 1;
+        }
         ClientWriter(sockfd);
     }
 
